@@ -1,0 +1,2 @@
+# Chess-Advisor
+The point of this project is to have this program run while I play chess games and get hints that I could compare with my moves so I can learn more about the game. The program is an AI chess bot that uses simple minimax with alpha beta pruning to win chess games. The bot does speech recognition so I can talk to it while playing chess games and keep it updated on the state of the game. It would advise me which next move would be best.
