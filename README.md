@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Nuance JavaScript Websocket Sample App
 
 This sample is intended to demonstrate how to use the Nuance Websocket protocol in JavaScript.
@@ -63,3 +64,7 @@ python -m http.server --cgi 8000
 You can then open the page in your browser by navigating to:
 
 [http://localhost:8000](http://localhost:8000)
+=======
+# Chess-Advisor
+The point of this project is to have this program run while I play chess games and get hints that I could compare with my moves so I can learn more about the game. The program is an AI chess bot that uses simple minimax with alpha beta pruning to win chess games. The bot does speech recognition so I can talk to it while playing chess games and keep it updated on the state of the game. It would advise me which next move would be best.
+>>>>>>> c111dad39ee1355e153a5cd131cd06ba16d91f87
