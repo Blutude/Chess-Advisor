@@ -195,14 +195,15 @@ var defaultOptions = {
             console.log(interpretation);
 
             if (interpretation.action.intent.value == 'move') {
-                onAPIResponse(interpretation.concepts);
+                onVoiceCommandResponse(interpretation.concepts);
+            } else if (interpretation.action.intent.value == 'hint') {
+                onHintRequest(interpretation.concepts);
             } else {
                 asrButton.innerHTML = "Command not understood. Please record command again."
             }
-            
-            
         } else {
-            asrButton.innerHTML = "Command not understood. Please record command again."
+            onHintRequest({});
+            //asrButton.innerHTML = "Command not understood. Please record command again."
         }
     },
     onerror: function(error) {
@@ -258,14 +259,74 @@ function asr(evt){
 var asrButton = $('#asr_go');
 asrButton.on('click', asr);
 
-var onAPIResponse = function (dict) {
+var getMoveString = function (move) {
+    var moveInt = parseInt(move);
+    var r;
+    var n = parseInt(moveInt / 16) + 1;
+    var mod = moveInt % 8;
+    switch (mod) {
+    case 0:
+        r = "a";
+        break;
+    case 1:
+        r = "b";
+        break;
+    case 2:
+        r = "c";
+        break;
+    case 3:
+        r = "d";
+        break;
+    case 4:
+        r = "e";
+        break;
+    case 5:
+        r = "f";
+        break;
+    case 6:
+        r = "g";
+        break;
+    case 7:
+        r = "h";
+        break;
+    }
+    n = 8 - n + 1;
+    r += n.toString();
+    return r;
+}
+
+var onHintRequest = function (dict) {
+    var depth = parseInt($('#search-depth').find(':selected').text());
+    var maxPlayer;
+    if (game.turn() === 'w') {
+        maxPlayer = true;
+    } else {
+        maxPlayer = false;
+    }
+    var bestMove = minimaxRoot(depth, game, maxPlayer);
+    greySquare(getMoveString(bestMove.from));
+    greySquare(getMoveString(bestMove.to));
+}
+
+var onVoiceCommandResponse = function (dict) {
     var bestMove = getBestMove(game);
-    game.ugly_move(bestMove);
-    board.position(game.fen());
+    //game.ugly_move(bestMove);
+    //board.position(game.fen());
+    board.move(parseVoice(dict));
     if (game.game_over()) {
         alert('Game over');
     }
+    updateStatus();
 };
+
+// Parsing voice input
+var parseVoice = function (dict) {
+    if (game.turn() === 'w')
+        return "e2-e4";
+    else {
+        return "e7-e5";
+    }
+}
 
 //// board visualization and games state handling ////
 
@@ -355,7 +416,7 @@ var onDrop = function (source, target) {
     }
 
     updateStatus();
-
+    //makeBestMove();
     //window.setTimeout(makeBestMove, 250);
 };
 
